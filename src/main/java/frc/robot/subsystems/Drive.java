@@ -16,10 +16,12 @@ public class Drive {
     private TalonFX leftMotor  = new TalonFX(left);
     private TalonFX leftMotor2  = new TalonFX(left2);
 
-    rightMotor2.set(ControlMode.Follower, right);
-    leftMotor2.set(ControlMode.Follower, left);
-    rightMotor.configSelectedFeedbackSensor(CTRE_MagEncoder_Relative,  int 0, int 1000);
-    leftMotor.configSelectedFeedbackSensor(CTRE_MagEncoder_Relative,  int 0, int 1000);
+    public void init(){
+        rightMotor2.set(ControlMode.Follower, right);
+        leftMotor2.set(ControlMode.Follower, left);
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
+    }
 
     public void setOpenLoop(double throttle, double turn){
         rightMotor.set(ControlMode.PercentOutput, throttle + turn);
