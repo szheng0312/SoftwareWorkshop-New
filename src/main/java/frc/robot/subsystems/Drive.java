@@ -13,8 +13,8 @@ interface subsystems{
 public class Drive implements subsystems{
     private static final int kright = 0;
     private static final int kright2 = 1;
-    private static final int kleft = 0;
-    private static final int kleft2 = 1;
+    private static final int kleft = 2;
+    private static final int kleft2 = 3;
 
     private TalonFX rightMaster  = new TalonFX(kright);
     private TalonFX rightMotor2  = new TalonFX(kright2);
@@ -39,3 +39,4 @@ public class Drive implements subsystems{
 
 
 }
+
