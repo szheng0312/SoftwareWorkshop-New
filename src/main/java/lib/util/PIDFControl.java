@@ -29,6 +29,23 @@ public class PIDFControl {
     public void setKf(double Kf){
         this.Kf = Kf;
     }
+
+    public double getKi(){
+        return Ki;
+    }
+
+    public double getKp(){
+        return Kp;
+    }
+    
+    public double getKd(){
+        return Kd;
+    }
+
+    public double getKf(){
+        return Kf;
+    }
+
     public double getError(){
         return previousError;
     }
