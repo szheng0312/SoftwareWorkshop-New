@@ -5,25 +5,25 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-interface subsystems{
+interface Subsystems{
     void init();
     void setOpenLoop(double throttle, double turn);
     void stop();
 }
-public class Drive implements subsystems{
-    private static final int kright = 0;
-    private static final int kright2 = 1;
-    private static final int kleft = 2;
-    private static final int kleft2 = 3;
+public class Drive implements Subsystems {
+    private final static int kRight = 0;
+    private final static int kRight2 = 1;
+    private final static int kLeft = 2;
+    private final static int kLeft2 = 3;
 
-    private TalonFX rightMaster  = new TalonFX(kright);
-    private TalonFX rightMotor2  = new TalonFX(kright2);
-    private TalonFX leftMaster  = new TalonFX(kleft);
-    private TalonFX leftMotor2  = new TalonFX(kleft2);
+    private TalonFX rightMaster  = new TalonFX(kRight);
+    private TalonFX rightMotor2  = new TalonFX(kRight2);
+    private TalonFX leftMaster  = new TalonFX(kLeft);
+    private TalonFX leftMotor2  = new TalonFX(kLeft2);
 
     public void init(){
-        rightMotor2.set(ControlMode.Follower, kright);
-        leftMotor2.set(ControlMode.Follower, kleft);
+        rightMotor2.set(ControlMode.Follower, kRight);
+        leftMotor2.set(ControlMode.Follower, kLeft);
         rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
         leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
     }
@@ -39,4 +39,3 @@ public class Drive implements subsystems{
 
 
 }
-
