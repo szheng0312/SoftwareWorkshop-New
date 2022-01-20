@@ -1,54 +1,47 @@
-package frc.robot.subsystems;
+package lib.util;
 
-import java.time.Clock;
-import java.util.concurrent.TimeUnit;
+import edu.wpi.first.wpilibj.Timer;
 
 
-public class PIDControl {
-    Clock clock = Clock.systemDefaultZone();
-    private double Kp = 0;
-    private double Ki = 0;
-    private double Kd = 0;
-
-    private double rightSetPoint;
-    private double leftSetPoint;
-    
-    private double error;
+public class PIDFControl {
+    private double Kp, Ki, Kd, Kf;
+    private double setPoint;
     private double previousError = 0;
-
-    private long time;
-    private long previousTime;
-
-    private long dt;
+    private double previousTime = 0;
     private double integral = 0;
 
+    public void setSetPoint(double setPoint){
+        this.setPoint = setPoint;
+    }
+
+    public void setKp(double Kp){
+        this.Kp = Kp;
+    }
+
+    public void setKi(double Ki){
+        this.Ki = Ki;
+    }
+
+    public void setKd(double Kd){
+        this.Kd = Kd;
+    }
+
+    public void setKf(double Kf){
+        this.Kf = Kf;
+    }
     public double getError(){
-        return error;
+        return previousError;
     }
 
-    public void set(double rightSetPoint, double leftSetPoint){
-        this.rightSetPoint = rightSetPoint;
-        this.leftSetPoint = leftSetPoint;
-    }
-
-    public void updateLoop() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(dt);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
-    public double findPID(double measuredValue, double desiredPoint){
-        time = clock.millis();
-        dt = time - previousTime;
-        error = desiredPoint - measuredValue;
+    public double findPID(double measuredValue){
+        double currentTime = Timer.getFPGATimestamp();
+        double dt = currentTime - previousTime;
+        double error = setPoint - measuredValue;
         integral = integral + error * dt;
         double derivative = (error - previousError) / dt;
-        double output = Kp * error + Ki * integral + Kd * derivative;
+        double output = Kp * error + Ki * integral + Kd * derivative + Kf * setPoint;
         previousError = error;
-        previousTime = time;
+        previousTime = currentTime;
         return output;
     }
 

@@ -5,12 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-interface Subsystems{
-    void init();
-    void setOpenLoop(double throttle, double turn);
-    void stop();
-}
-public class Drive implements Subsystems {
+public class Drive extends subsystems {
     private final static int kRight = 0;
     private final static int kRight2 = 1;
     private final static int kLeft = 2;
