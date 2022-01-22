@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-public class Drive extends subsystems {
+public class Drive extends Subsystem {
     private final static int kRight = 0;
     private final static int kRight2 = 1;
     private final static int kLeft = 2;
@@ -30,6 +30,18 @@ public class Drive extends subsystems {
     public void stop(){
         rightMaster.setNeutralMode(NeutralMode.Brake);
         leftMaster.setNeutralMode(NeutralMode.Brake);
+    }
+
+    @Override
+    public boolean checkSystem() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void outputTelemetry() {
+        // TODO Auto-generated method stub
+        
     }
 
 

@@ -6,4 +6,6 @@ public class Constants {
     public static final int kRight2 = 1;
     public static final int kLeftMaster = 2;
     public static final int kLeft2 = 3;
+    public static final double kEpsilon = 1e-12;
+
 }
