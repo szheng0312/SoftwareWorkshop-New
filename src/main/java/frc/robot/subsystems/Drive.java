@@ -3,30 +3,71 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import frc.robot.Constants;
 
 public class Drive extends Subsystem {
-    private final static int kRight = 0;
-    private final static int kRight2 = 1;
-    private final static int kLeft = 2;
-    private final static int kLeft2 = 3;
 
-    private TalonFX rightMaster  = new TalonFX(kRight);
-    private TalonFX rightMotor2  = new TalonFX(kRight2);
-    private TalonFX leftMaster  = new TalonFX(kLeft);
-    private TalonFX leftMotor2  = new TalonFX(kLeft2);
+    public class PeriodicIO{
+        double rightDemand;
+        double leftDemand;
+    }
+    public static Drive mDrive;
 
-    public void init(){
-        rightMotor2.set(ControlMode.Follower, kRight);
-        leftMotor2.set(ControlMode.Follower, kLeft);
+    public PeriodicIO mPeriodicIO;
+
+    TalonFX rightMaster, rightMotor2, leftMaster, leftMaster2;
+    Joystick throttleJS, turnJS;
+
+    public Drive(){
+        TalonFX rightMaster  = new TalonFX(Constants.kRightMaster);
+        TalonFX rightMotor2  = new TalonFX(Constants.kRight2);
+        TalonFX leftMaster  = new TalonFX(Constants.kLeftMaster);
+        TalonFX leftMotor2  = new TalonFX(Constants.kLeft2);
+        Joystick throttleJS = new Joystick(Constants.throttleJSid);
+        Joystick turnJS = new Joystick(Constants.throttleJSid);
+        rightMotor2.set(ControlMode.Follower, Constants.kRightMaster);
+        leftMotor2.set(ControlMode.Follower, Constants.kLeftMaster);
         rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
         leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
     }
 
-    public void setOpenLoop(double throttle, double turn){
-        rightMaster.set(ControlMode.PercentOutput, throttle + turn);
-        leftMaster.set(ControlMode.PercentOutput, throttle - turn);
+    public synchronized static Drive getInstance() {
+        if (mDrive == null) {
+            mDrive = new Drive();
+        }
+
+        return mDrive;
     }
+    
+    public void readPeriodicInputs() {
+        double rightMovement = rightMaster.getSelectedSensorPosition(1);
+        double leftMovement = leftMaster.getSelectedSensorPosition(1);
+        SmartDashboard.putNumber("Right Encoder:", rightMovement);
+        SmartDashboard.putNumber("Left Encoder:", leftMovement);
+        mDrive.setOpenLoop(throttleJS.getRawAxis(1), turnJS.getRawAxis(0));
+    }
+
+    public void writePeriodicOutputs() {
+        rightMaster.set(ControlMode.PercentOutput, mPeriodicIO.rightDemand);
+        leftMaster.set(ControlMode.PercentOutput, mPeriodicIO.leftDemand);
+    }
+
+    public void setOpenLoop(double throttle, double turn){
+        mPeriodicIO.rightDemand = throttle + turn;
+        mPeriodicIO.leftDemand = throttle - turn;
+        if (Math.abs(throttle) > 1 || Math.abs(turn) > 1){
+            double constant = Math.max(mPeriodicIO.rightDemand, mPeriodicIO.leftDemand);
+            mPeriodicIO.rightDemand /= constant;
+            mPeriodicIO.leftDemand /= constant;
+        }
+
+    }
+
     public void stop(){
         rightMaster.setNeutralMode(NeutralMode.Brake);
         leftMaster.setNeutralMode(NeutralMode.Brake);

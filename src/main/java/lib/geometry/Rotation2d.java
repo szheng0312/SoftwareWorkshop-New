@@ -2,8 +2,6 @@ package lib.geometry;
 
 import lib.util.Util;
 
-import java.text.DecimalFormat;
-
 import static lib.util.Util.kEpsilon;
 
 /**
@@ -211,10 +209,6 @@ public class Rotation2d implements IRotation2d<Rotation2d> {
         return this.rotateBy(Rotation2d.fromRadians(angle_diff * x));
     }
 
-    @Override
-    public String toString() {
-        return "(" + new DecimalFormat("#0.000").format(getDegrees()) + " deg)";
-    }
 
     @Override
     public double distance(final Rotation2d other) {
