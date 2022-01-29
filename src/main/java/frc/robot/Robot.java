@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +27,9 @@ public class Robot extends TimedRobot {
   private final Looper mDisabledLooper = new Looper();
   private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
   private Drive drive = Drive.getInstance();
+
+  Joystick throttleJS = new Joystick(Constants.throttleJSid);
+  Joystick turnJS = new Joystick(Constants.throttleJSid);
   
 
   /**
@@ -96,6 +100,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    drive.setOpenLoop(throttleJS.getRawAxis(1), turnJS.getRawAxis(0));
   }
 
   /** This function is called once when the robot is disabled. */

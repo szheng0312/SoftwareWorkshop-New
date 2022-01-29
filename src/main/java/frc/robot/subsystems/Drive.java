@@ -11,6 +11,21 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.robot.Constants;
 
 public class Drive extends Subsystem {
+    public class DriveCommand {
+        private double rightMotorInput, leftMotorInput;
+    
+        public DriveCommand(double rightMotorInput, double leftMotorInput){
+            this.rightMotorInput = rightMotorInput;
+            this.leftMotorInput = leftMotorInput;
+        }
+        public double getRight(){
+            return rightMotorInput;
+        }
+        public double getLeft(){
+            return leftMotorInput;
+        }
+        
+    }
 
     public class PeriodicIO{
         double rightDemand;
@@ -20,16 +35,14 @@ public class Drive extends Subsystem {
 
     public PeriodicIO mPeriodicIO;
 
-    TalonFX rightMaster, rightMotor2, leftMaster, leftMaster2;
+    TalonFX rightMaster, rightMotor2, leftMaster, leftMotor2;
     Joystick throttleJS, turnJS;
 
     public Drive(){
-        TalonFX rightMaster  = new TalonFX(Constants.kRightMaster);
-        TalonFX rightMotor2  = new TalonFX(Constants.kRight2);
-        TalonFX leftMaster  = new TalonFX(Constants.kLeftMaster);
-        TalonFX leftMotor2  = new TalonFX(Constants.kLeft2);
-        Joystick throttleJS = new Joystick(Constants.throttleJSid);
-        Joystick turnJS = new Joystick(Constants.throttleJSid);
+        rightMaster  = new TalonFX(Constants.kRightMaster);
+        rightMotor2  = new TalonFX(Constants.kRight2);
+        leftMaster  = new TalonFX(Constants.kLeftMaster);
+        leftMotor2  = new TalonFX(Constants.kLeft2);
         rightMotor2.set(ControlMode.Follower, Constants.kRightMaster);
         leftMotor2.set(ControlMode.Follower, Constants.kLeftMaster);
         rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 1000);
@@ -44,14 +57,16 @@ public class Drive extends Subsystem {
         return mDrive;
     }
     
+    @Override
     public void readPeriodicInputs() {
         double rightMovement = rightMaster.getSelectedSensorPosition(1);
         double leftMovement = leftMaster.getSelectedSensorPosition(1);
         SmartDashboard.putNumber("Right Encoder:", rightMovement);
         SmartDashboard.putNumber("Left Encoder:", leftMovement);
-        mDrive.setOpenLoop(throttleJS.getRawAxis(1), turnJS.getRawAxis(0));
+
     }
 
+    @Override
     public void writePeriodicOutputs() {
         rightMaster.set(ControlMode.PercentOutput, mPeriodicIO.rightDemand);
         leftMaster.set(ControlMode.PercentOutput, mPeriodicIO.leftDemand);
@@ -73,13 +88,12 @@ public class Drive extends Subsystem {
         leftMaster.setNeutralMode(NeutralMode.Brake);
     }
 
-    @Override
+    
     public boolean checkSystem() {
         // TODO Auto-generated method stub
         return false;
     }
-
-    @Override
+    
     public void outputTelemetry() {
         // TODO Auto-generated method stub
         
