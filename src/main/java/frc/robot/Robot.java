@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   private Drive drive = Drive.getInstance();
 
   Joystick throttleJS = new Joystick(Constants.throttleJSid);
-  Joystick turnJS = new Joystick(Constants.throttleJSid);
+  Joystick turnJS = new Joystick(Constants.turnJSid);
   
 
   /**

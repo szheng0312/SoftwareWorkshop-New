@@ -75,7 +75,7 @@ public class Drive extends Subsystem {
     public void setOpenLoop(double throttle, double turn){
         mPeriodicIO.rightDemand = throttle + turn;
         mPeriodicIO.leftDemand = throttle - turn;
-        if (Math.abs(throttle) > 1 || Math.abs(turn) > 1){
+        if (Math.abs(mPeriodicIO.rightDemand) > 1 || Math.abs(mPeriodicIO.leftDemand) > 1){
             double constant = Math.max(mPeriodicIO.rightDemand, mPeriodicIO.leftDemand);
             mPeriodicIO.rightDemand /= constant;
             mPeriodicIO.leftDemand /= constant;
